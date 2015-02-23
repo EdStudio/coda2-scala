@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE syntax SYSTEM "syntax.dtd">
+<syntax>
+  <head>
+    <name>Scala</name>
+    <!-- optional to add spelling-dicitionary autocomplete words -->
+    <!-- <autocompleteoptions use-spelling-dictionary="yes" /> -->
+
+    <charsdelimitingtokens><![CDATA[
+()[]{}'`".;:,]]></charsdelimitingtokens>
+    <charsintokens><![CDATA[_0987654321abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@.]]></charsintokens> <!-- Valid Characters for Variables -->
+    <!-- <charsdelimitingtokens></charsdelimitingtokens> -->
+    <folding toplevel="2" />
+  </head>
+
+  <states>
+    <default id="Base" scope="meta.default">
+
+        <state id="Container" containerState="yes" scope="meta.default">
+          <keywords id="Keywords" useforautocomplete="yes" scope="keyword.control">
+        	<string>abstract</string>
+        	<string>val</string>
+        	<string>var</string>
+        	<string>super</string>
+        	<string>private</string>
+        	<string>protected</string>
+        	<string>public</string>
+        	<string>override</string>
+        	<string>final</string>
+        	<string>sealed</string>
+        	<string>extends</string>
+        	<string>with</string>
+        	<string>lazy</string>
+        	<string>def</string>
+        	<string>finally</string>
+        	<string>requires</string>
+        	<string>object</string>
+        	<string>implicit</string>
+        	<string>class</string>
+        	<string>trait</string>
+        	<string>yield</string>
+        	<string>package</string>
+        	<string>import</string>
+        	<string>return</string>
+        	<string>new</string>
+        	<string>throw</string>
+        	<string>type</string>
+        	<string>if</string>
+        	<string>else</string>
+        	<string>do</string>
+        	<string>try</string>
+        	<string>for</string>
+        	<string>while</string>
+        	<string>match</string>
+        	<string>case</string>
+        	<string>catch</string>
+        	<string>forSome</string>
+          </keywords>
+
+          <keywords id="Built-in Constants" useforautocomplete="yes" scope="support.constant">
+            <string>null</string>
+            <string>true</string>
+            <string>false</string>
+            <regex><![CDATA[(?<!\w)(([0-9]+(\.[0-9]*)?|\.[0-9]+)([Ee][+\-]?[0-9]+)[FfDd]?)]]></regex>
+            <regex><![CDATA[(?<!\w)([1-9][0-9]*|0(x[0-9A-Fa-f]+)?)([Ll])?]]></regex>
+            <regex><![CDATA[('([^\\]|\\([btnfr"'\\]|u[0-9A-Fa-f]{4}|[0-7]{1,3}))')]]></regex>
+            <regex><![CDATA[(`([[\p{Ll}\p{Lu}\p{Lt}\p{Lo}\p{Nl}\$0-9]&&[^_]])+(_[\p{Sm}\p{So}!#%&'\*\+\-/:\?@\^_]*)?)]]></regex>
+          </keywords>
+
+          <keywords id="Built-In Functions" useforautocomplete="yes" scope="support.function">
+          </keywords>
+
+          <keywords id="TypeKeywords" useforautocomplete="yes" scope="keyword.type">
+        	<string>Unit</string>
+        	<string>String</string>
+        	<string>Int</string>
+        	<string>Float</string>
+        	<string>Short</string>
+        	<string>Byte</string>
+        	<string>Boolean</string>
+        	<string>Character</string>
+        	<string>Any</string>
+        	<string>AnyRef</string>
+            <string>Nothing</string>
+          </keywords>
+
+          <keywords id="Classes" useforautocomplete="yes" scope="support.class">
+            <string>List</string>
+            <string>ArrayBuffer</string>
+            <string>Set</string>
+          </keywords>
+
+          <keywords id="FunctionRegex" useforautocomplete="no" scope="language.function">
+    		<regex>([A-Za-z0-9_]+ *)\(</regex>
+          </keywords>
+
+          <keywords id="Preprocessor" useforautocomplete="no" scope="keyword">
+    		<regex>(^[ 	]*import([^\n\r])*)</regex>
+            <regex>(^[ 	]*package([^\n\r])*)</regex>
+          </keywords>
+
+          <keywords id="Operators" useforautocomplete="no" scope="language.operator" highlightInOrder="yes">
+            <regex>([\^\+\-\*\/\=\!\&lt;\&gt;\%&amp;]|\|\||\|)</regex>
+          </keywords>
+
+          <state id="Characters" scope="constant.numeric.character">
+            <begin><regex>'(?=(?:\\u[A-Fa-f0-9]{4}'|\\?.'))</regex></begin>
+            <end><regex>(\\u[A-Fa-f0-9]{4}')|(\\'')|(.')</regex></end>
+          </state>
+
+          <keywords id="Numbers" useforautocomplete="no" scope="constant.numeric">
+    		<regex>(?&lt;![\w\d_])((?:[+-]?(?:(?:[0-9]+\.[0-9]*)|(?:\.[0-9]+))(?:[eE][+\-]?[0-9]+)?[fFlL]?)|(?:(?:(?:[1-9][0-9]*)|0[0-7]*|(?:0[xX][0-9a-fA-F]+))(?:(?:[uU][lL]?)|(?:[lL][uU]?))?))(?![\w\d_])</regex>
+          </keywords>
+
+          <state id="JavadocComment" type="comment" foldable="yes" scope="comment.block.documentation">
+            <begin><regex>/\*\*</regex></begin>
+            <end><regex>\*/</regex></end>
+            <keywords id="JavadocTags" useforautocomplete="no" scope="comment.block.documentation.tags">
+                <regex>(?&lt;=[^\w\d]|^)(@\w+)</regex>
+            </keywords>
+    		<import mode="Base" state="EmailAndURLContainerState" keywords-only="yes"/>
+          </state>
+
+          <state id="Block" foldable="yes" scope="meta.block">
+            <begin><regex>{</regex><autoend>}</autoend></begin>
+            <end><regex>}</regex></end>
+            <import />
+          </state>
+
+          <state id="Comment" type="comment" foldable="yes" scope="comment.block">
+                <begin><regex>/\*</regex></begin>
+                <end><regex>\*/</regex></end>
+    			<import mode="Base" state="EmailAndURLContainerState" keywords-only="yes"/>
+          </state>
+
+          <state id="SingleComment" type="comment" scope="comment.line">
+               <begin><regex>//</regex></begin>
+                <end><regex>[\n\r]</regex></end>
+    			<import mode="Base" state="EmailAndURLContainerState" keywords-only="yes"/>
+           </state>
+
+          <state id="String with double quotes" type="string" usespellchecking="yes" scope="string.double">
+            <begin><regex>"</regex></begin>
+    		<end><regex>(((?&lt;!\\)(\\\\)*)|^)"</regex></end>
+          </state>
+
+          <state id="String with single quotes" type="string" usespellchecking="yes" scope="string.single">
+    		<begin><regex>'</regex></begin>
+    		<end><regex>(((?&lt;!\\)(\\\\)*)|^)'</regex></end>
+          </state>
+
+        </state>
+
+        <import mode="Scala" state="Container" keywords-only="yes"/>
+		<import mode="Scala" state="Container" />
+
+<!--
+		<state id="Class Blocks" foldable="yes" delimiterState="Container" scope="meta.block">
+			<begin><regex>^class[^:]+\:</regex></begin>
+			<end><regex>(?:\r?\n|\r)(?=(?:\r?\n|\r)(?:\r?\n|\r)\S|(?:\r?\n|\r)\S|\S)</regex></end>
+			<import mode="Scala" state="Container" keywords-only="yes"/>
+			<import />
+		</state>
+
+		<state id="Def Blocks" foldable="yes" delimiterState="Container" scope="meta.block" >
+			<begin><regex>(?'defstartingwhitespace'[ \t]*)def\s[^)]+\)[ \t]*\:</regex></begin>				<end><regex>(?:\r?\n|\r)(?=(?:\r?\n|\r)(?:\r?\n|\r)(?#see-insert-start-group:defstartingwhitespace)\S|(?:\r?\n|\r)(?#see-insert-start-group:defstartingwhitespace)\S|(?#see-insert-start-group:defstartingwhitespace)\S|(?:\r?\n|\r)(?:\r?\n|\r)\S|(?:\r?\n|\r)\S|\S)</regex></end>
+			<import mode="Scala" state="Container" keywords-only="yes"/>
+			<import />
+		</state>
+-->
+
+
+  </default>
+
+</states>
+
+</syntax>
